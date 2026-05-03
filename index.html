@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Игровой портал | Мини-игры</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: #333;
+            display: block;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .game-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .game-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #4a5568;
+        }
+
+        .game-url {
+            font-size: 0.75rem;
+            color: #718096;
+            text-align: center;
+            word-break: break-all;
+            background: #f7fafc;
+            padding: 8px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-family: monospace;
+        }
+
+        footer {
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            margin-top: 40px;
+            padding: 20px;
+        }
+
+        @media (max-width: 640px) {
+            h1 { font-size: 1.8rem; }
+            .games-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 Игровой портал</h1>
+            <p class="subtitle">Коллекция увлекательных мини-игр</p>
+        </header>
+
+        <div class="games-grid" id="gamesGrid"></div>
+        <footer>
+            <p>Нажмите на любую игру — откроется в новой вкладке | Все проекты находятся в разработке</p>
+        </footer>
+    </div>
+
+    <script>
+        const gamesData = [
+            { name: "🍎 Fruit Fall", url: "https://doorcreeps.github.io/FruitFall/" },
+            { name: "🐹 Homyak Tap Tap", url: "https://doorcreeps.github.io/HomyakTapTap/" },
+            { name: "🧮 Math Path", url: "https://doorcreeps.github.io/MathPath/" },
+            { name: "💣 Bomb Math", url: "https://doorcreeps.github.io/bombmath/" },
+            { name: "🧩 Puzzle", url: "https://doorcreeps.github.io/puzzle/" },
+            { name: "🎲 Mini Games Hub", url: "https://doorcreeps.github.io/MiniGamesHub/" },
+            { name: "🃏 Match 3", url: "https://doorcreeps.github.io/Match3" },
+            { name: "🐾 Buy An Animal", url: "https://doorcreeps.github.io/BuyAnAnimal/" },
+            { name: "🧠 Memory", url: "https://doorcreeps.github.io/Memory/" },
+            { name: "🇷🇺 Russian Language", url: "https://doorcreeps.github.io/RussianLanguage/" }
+        ];
+
+        // Убираем дубликаты, если есть (в списке был повтор MathPath)
+        const uniqueGames = [];
+        const seenUrls = new Set();
+        for (const game of gamesData) {
+            if (!seenUrls.has(game.url)) {
+                seenUrls.add(game.url);
+                uniqueGames.push(game);
+            }
+        }
+
+        const grid = document.getElementById('gamesGrid');
+
+        uniqueGames.forEach(game => {
+            const card = document.createElement('a');
+            card.href = game.url;
+            card.target = '_blank';
+            card.rel = 'noopener noreferrer';
+            card.className = 'game-card';
+            
+            const iconSpan = document.createElement('div');
+            iconSpan.className = 'game-icon';
+            iconSpan.textContent = game.name.charAt(0) + game.name.charAt(1);
+            
+            const titleSpan = document.createElement('div');
+            titleSpan.className = 'game-title';
+            titleSpan.textContent = game.name;
+            
+            const urlSpan = document.createElement('div');
+            urlSpan.className = 'game-url';
+            urlSpan.textContent = game.url.replace('https://doorcreeps.github.io/', '').replace('/', '');
+            
+            card.appendChild(iconSpan);
+            card.appendChild(titleSpan);
+            card.appendChild(urlSpan);
+            
+            grid.appendChild(card);
+        });
+
+        // Альтернативные иконки для игр на случай, если эмодзи не отображаются
+        const gameIcons = {
+            "🍎 Fruit Fall": "🍎",
+            "🐹 Homyak Tap Tap": "🐹",
+            "🧮 Math Path": "🧮",
+            "💣 Bomb Math": "💣",
+            "🧩 Puzzle": "🧩",
+            "🎲 Mini Games Hub": "🎲",
+            "🃏 Match 3": "🃏",
+            "🐾 Buy An Animal": "🐾",
+            "🧠 Memory": "🧠",
+            "🇷🇺 Russian Language": "🇷🇺"
+        };
+        
+        const cards = document.querySelectorAll('.game-card');
+        cards.forEach((card, idx) => {
+            const iconDiv = card.querySelector('.game-icon');
+            const gameName = uniqueGames[idx].name;
+            if (gameIcons[gameName]) {
+                iconDiv.textContent = gameIcons[gameName];
+            }
+        });
+    </script>
+</body>
+</html>
